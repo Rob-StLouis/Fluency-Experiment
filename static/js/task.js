@@ -455,6 +455,11 @@ var hidebutton = function (){
 	document.getElementById('nextbutton').style.visibility = 'hidden';
 	console.log("hidebutton");
 };
+
+var hideMusicbutton = function (){
+	document.getElementById('soundbutton').style.visibility = 'hidden';
+
+};
 var showbutton = function (){
 	document.getElementById('nextbutton').style.visibility = 'visible';
 	console.log("showbutton")
@@ -475,9 +480,9 @@ var finish = function () {
 
 				d3.select("#additionaltext").html('<p> In this section, music is playing in the background. The music is playing now, please turn up your volume so that you are able to hear it clearly. '+
 					'As an attention check, you will be asked to answer some simple questions about the music. ' +
-					'Please note that previous research with this music shows that it generally enhances one’s focus and makes it feel easier to think. ' +
+					'</br> </br>Please note one important thing about the music. Previous research with this music shows that it generally enhances one’s focus and makes it feel easier to think. ' +
 					'That is, in the decision task you are about to do, the music will make it easier to identify how much the gamble is worth to you.' +
-					'</br></br> To ensure the music can influence you, please listen to it for at least 10 seconds. After 10 seconds you will be able to advance to Section 2.'+
+					'</br></br> To get an impression of the music please click the button below to start listenting to the music.  After 10 seconds you will be able to advance to Section 2.'+
 					'</p>');
 				document.getElementById('music').play();
 				hidebutton();
@@ -489,13 +494,16 @@ var finish = function () {
 
 				d3.select("#additionaltext").html('<p> In this section, music is playing in the background. The music is playing now, please turn up your volume so that you are able to hear it clearly. ' +
 					'As an attention check, you will be asked to answer some simple questions about the music. ' +
-					"Please note that previous research with this music shows that it generally disrupts one’s focus and makes it feel more difficult to think" +
+					"</br> </br>Please note one important thing about the music. Previous research with this music shows that it generally disrupts one’s focus and makes it feel more difficult to think.  " +
 					'That is, in the decision task you are about to do, the music will make it hard to identify how much the gamble is worth to you.' +
-					'</br> </br>To ensure the music can influence you, please listen to it for at least 10 seconds. After 10 seconds you will be able to advance to Section 2.'+
+					'</br> </br>To get an impression of the music please click the button below to start listenting to the music. After 10 seconds you will be able to advance to Section 2.'+
 					'</p>');
-				document.getElementById('music').play();
 				hidebutton();
-				setTimeout(showbutton,10000);
+				break;
+			case 0:
+				hideMusicbutton();
+
+
 
 		}
 
@@ -512,6 +520,10 @@ var finish = function () {
 };
 
 
+var playmusic = function(){
+	document.getElementById('music').play();
+	setTimeout(showbutton,10000);
+}
 
 
 
