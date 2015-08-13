@@ -24,7 +24,8 @@ var pages = [
 	"secondInstruction.html",
 	"endquestions.html",
 	"postquestionnaireNoMusic2.html",
-	"postquestionnaireNoMusic3.html"
+	"postquestionnaireNoMusic3.html",
+	"DifficultyQuestion1.html"
 
 ];
 
@@ -35,29 +36,29 @@ musicCondition=7;
 
 if (mycondition===0) {
 
-	alert("0");
+	//alert("0");
 	musicCondition = 0;
 }else if(mycondition===3){
-		alert("3");
+		//alert("3");
 		 musicCondition = 0;
 }else if(mycondition===1){
-		alert("1");
+		//alert("1");
 		 musicCondition = 1;
 }else if(mycondition===4){
-		alert("4");
+		//alert("4");
 		 musicCondition = 1;
 }else if(mycondition===2){
-		alert("2");
+		//alert("2");
 		 musicCondition = 2;
 }else if(mycondition===5){
-		alert("5");
+		//alert("5");
 		 musicCondition = 2;
 }
 
 console.log(typeof mycondition);
 console.log( musicCondition);
 
-if(musicCondition==0){
+//if(musicCondition==0){
 	var instructionPages = [ // add as a list as many pages as you like
 		"instructions/instruct-1.html"
 		//"instructions/instructHigh.html",
@@ -65,24 +66,24 @@ if(musicCondition==0){
 		//"instructions/instructNo.html"
 	];
 
-}else if (musicCondition==1) {
-
-	var instructionPages = [ // add as a list as many pages as you like
-		"instructions/instruct-1.html",
-		"instructions/instructHigh.html"
-		//"instructions/instructLow.html",
-		//"instructions/instructNo.html"
-	];
-
-}else  {
-	var instructionPages = [ // add as a list as many pages as you like
-		"instructions/instruct-1.html",
-		//"instructions/instructHigh.html",
-		"instructions/instructLow.html"
-		//"instructions/instructNo.html"
-	];
-
-}
+//}else if (musicCondition==1) {
+//
+//	var instructionPages = [ // add as a list as many pages as you like
+//		"instructions/instruct-1.html",
+//		"instructions/instructHigh.html"
+//		//"instructions/instructLow.html",
+//		//"instructions/instructNo.html"
+//	];
+//
+//}else  {
+//	var instructionPages = [ // add as a list as many pages as you like
+//		"instructions/instruct-1.html",
+//		//"instructions/instructHigh.html",
+//		"instructions/instructLow.html"
+//		//"instructions/instructNo.html"
+//	];
+//
+//}
 
 
 
@@ -114,19 +115,15 @@ var GambleExperiment = function() {
 	var currentnumber = 0;
 
 
-	var wordon,
-		listening = false,
-		listeningInt = false;
-
 	var initialCond = 2;
 
 
 	if (mycounterbalance == 0) {
 
-		var valLevels = [50, 100, 200];
+		var valLevels = [50, 100, 150, 200];
 	}
 	else {
-		var valLevels = [200, 100, 50];
+		var valLevels = [200,150,100, 50];
 	}
 
 
@@ -145,17 +142,19 @@ var GambleExperiment = function() {
 		if (stims.length === 0) {
 			questionset.shift();
 			secondCondition += 1;
-			finish(questionset);
+			prefinish();
 
 		}
 		else {
 			trialNum += 1;
+
 			stim = stims.shift();
 			stimH = stim.toString();
 			currentnumber = stim;
 			show_info(stimH);
+			document.getElementById('SubButton').style.visibility = 'visible';
+
 			trialstart = new Date().getTime();
-			listening = true;
 
 			if (secondCondition===1) {
 				if (musicCondition > 0) {
@@ -167,13 +166,13 @@ var GambleExperiment = function() {
 	};
 
 
-	var riskyText1 = " Imagine that there is a bag on the table filled with exactly 50 red poker chips and" +
-		" 50 black poker chips. Suppose that you are offered a ticket to a game that is to be played as " +
+	var riskyText1 = " Imagine that there is a bag on the table filled with <b>exactly 50 red poker chips and" +
+		" 50 black poker chips.</b> Suppose that you are offered a ticket to a game that is to be played as " +
 		"follows: First, you are to guess a color (red or black). Next, without looking, you are to draw " +
 		"a poker chip out the bags. If the color that you draw is the same as the one you predicted, then you will win $";
 
 	var ambiguousText1 = "Imagine that there is a bag on the table filled with 100 poker chips that are red and black, " +
-		"but you do not know their relative proportion. Suppose that you are offered a ticket to a game that is to be" +
+		"but <b> you do not know their relative proportion.</b> Suppose that you are offered a ticket to a game that is to be" +
 		" played as follows: First, you are to guess a color (red or black). Next, without looking, " +
 		"you are to draw a poker chip out of the bag. If the color that you draw is the same as the " +
 		"one you predicted, then you will win $";
@@ -183,7 +182,7 @@ var GambleExperiment = function() {
 		" ticket to play such a game for each of the bags?";
 
 
-	var questionText = "Please provide a dollar value between $0 and $";
+	var questionText = "Please provide a dollar value between <b>$0 and $";
 
 
 	var response_handler = function () {
@@ -255,52 +254,25 @@ var GambleExperiment = function() {
 
 
 			remove_stims();
-			next();
+			document.getElementById('SubButton').style.visibility = 'hidden';
+			setTimeout(next,250);
+
 
 		}
 
 	};
 
 
-	var finish = function () {
-
-		if (secondCondition == 1) {
-			currentview = new secondInstruction;
-
-			switch (musicCondition) {
 
 
-				case 1:
-
-					d3.select("#additionaltext").html('<p> In this section, music will play in the background.  This music allows us to monitor attention.  ' +
-						'As an attention check, at some point during this task a word will be said over the music. ' +
-						'You will be asked to report what word was said. ' +
-						'Please note that previous research with this music shows that it generally enhances one’s focus and makes it feel easier to think. ' +
-						'That is, in the decision task you are about to do, the music will make it easier to identify how much the gamble is worth to you.' +
-						'</p>');
-					break;
-
-				case 2:
-
-					d3.select("#additionaltext").html('<p> In this section, music will play in the background.  This music allows us to monitor attention.  ' +
-						'As an attention check, at some point during this task, a word will be said over the music. ' +
-						'You will be asked to report what word was said. ' +
-						"Please note that previous research with this music shows that it generally disrupts one’s focus and makes it feel more difficult to think" +
-						'That is, in the decision task you are about to do, the music will make it hard to identify how much the gamble is worth to you.' +
-						'</p>');
-			}
-
-
-		} else {
-
-
-			EndQuestions();
-
-
-		}
+	var prefinish = function () {
+			currentview = new DifficultyQuestions1;
 
 
 	};
+
+
+
 
 	var show_info = function (text) {
 
@@ -308,75 +280,76 @@ var GambleExperiment = function() {
 		//finish up
 
 		if (questionset[0] === 0) {
+			//d3.select("#stim1")
+			//	.append("div")
+			//	.attr("id", "word")
+			//	.style("text-align", "center")
+			//	.style("font-size", "20px")
+			//	.style("font-weight", "140")
+			//	.style("margin", "20px")
+			//	.text(riskyText1 + text.toString() + endText1);
+
 			d3.select("#stim1")
 				.append("div")
 				.attr("id", "word")
-				.style("text-align", "center")
-				.style("font-size", "20px")
-				.style("font-weight", "140")
-				.style("margin", "20px")
-				.text(riskyText1 + text.toString() + endText1);
+				.html('<p>'+riskyText1 + '<b>'+ text.toString() + '</b>' + endText1+'</p>');
 
-			d3.select("#stim2")
-				.append("div")
-				.attr("id", "worda1")
-				.style("text-align", "center")
-				.style("font-size", "20px")
-				.style("font-weight", "180")
-				.style("margin", "20px")
-				.text("In the bag, there are:");
-			d3.select("#stim2")
-				.append("div")
-				.attr("id", "worda2")
-				.style("text-align", "center")
-				.style("font-size", "20px")
-				.style("font-weight", "140")
-				.style("margin", "20px")
-				.text("50 red poker chips");
-			d3.select("#stim2")
-				.append("div")
-				.attr("id", "worda3")
-				.style("text-align", "center")
-				.style("font-size", "20px")
-				.style("font-weight", "180")
-				.style("margin", "20px")
-				.text("50 black poker chips");
+			//d3.select("#stim2")
+			//	.append("div")
+			//	.attr("id", "worda1")
+			//	.style("text-align", "center")
+			//	.style("font-size", "20px")
+			//	.style("font-weight", "180")
+			//	.style("margin", "20px")
+			//	.text("In the bag, there are:");
+			//d3.select("#stim2")
+			//	.append("div")
+			//	.attr("id", "worda2")
+			//	.style("text-align", "center")
+			//	.style("font-size", "20px")
+			//	.style("font-weight", "140")
+			//	.style("margin", "20px")
+			//	.text("50 red poker chips");
+			//d3.select("#stim2")
+			//	.append("div")
+			//	.attr("id", "worda3")
+			//	.style("text-align", "center")
+			//	.style("font-size", "20px")
+			//	.style("font-weight", "180")
+			//	.style("margin", "20px")
+			//	.text("50 black poker chips");
 
 
 		} else {
 			d3.select("#stim1")
 				.append("div")
 				.attr("id", "word")
-				.style("text-align", "center")
-				.style("font-size", "20px")
-				.style("font-weight", "140")
-				.style("margin", "20px")
-				.text(ambiguousText1 + text.toString() + endText1);
+				.html('<p>'+ambiguousText1 + '<b>' +text.toString()+'</b>' + endText1+'</p>');
 
-			d3.select("#stim2")
-				.append("div")
-				.attr("id", "worda1")
-				.style("text-align", "center")
-				.style("font-size", "20px")
-				.style("font-weight", "180")
-				.style("margin", "20px")
-				.text("In the bag, there are:");
-			d3.select("#stim2")
-				.append("div")
-				.attr("id", "worda2")
-				.style("text-align", "center")
-				.style("font-size", "20px")
-				.style("font-weight", "140")
-				.style("margin", "20px")
-				.text("? red poker chips");
-			d3.select("#stim2")
-				.append("div")
-				.attr("id", "worda3")
-				.style("text-align", "center")
-				.style("font-size", "20px")
-				.style("font-weight", "180")
-				.style("margin", "20px")
-				.text("? black poker chips");
+			//d3.select("#stim2")
+			//	.append("div")
+			//	.attr("id", "worda1")
+			//	.style("text-align", "center")
+			//	.style("font-size", "20px")
+			//	.style("font-weight", "180")
+			//	.style("margin", "20px")
+			//	.text("In the bag, there are:");
+			//d3.select("#stim2")
+			//	.append("div")
+			//	.attr("id", "worda2")
+			//	.style("text-align", "center")
+			//	.style("font-size", "20px")
+			//	.style("font-weight", "140")
+			//	.style("margin", "20px")
+			//	.text("? red poker chips");
+			//d3.select("#stim2")
+			//	.append("div")
+			//	.attr("id", "worda3")
+			//	.style("text-align", "center")
+			//	.style("font-size", "20px")
+			//	.style("font-weight", "180")
+			//	.style("margin", "20px")
+			//	.text("? black poker chips");
 
 		}
 
@@ -385,11 +358,7 @@ var GambleExperiment = function() {
 		d3.select("#stim3")
 			.append("div")
 			.attr("id", "word2")
-			.style("text-align", "center")
-			.style("font-size", "20px")
-			.style("font-weight", "180")
-			.style("margin", "20px")
-			.text(questionText + text.toString());
+			.html('<p>' + questionText + text.toString()+ "</b></p>");
 
 
 		//textbox
@@ -405,7 +374,18 @@ var GambleExperiment = function() {
 			.append("xhtml:div")
 			.html("<input type='text' id=newtextbox>");
 
+
+		if(secondCondition===0){
+			d3.select("#stagetitle").html('<h2>Section 1</h2>');
+
+		}else{
+			d3.select("#stagetitle").html('<h2>Section 2</h2>');
+
+		}
+
+
 		document.getElementById('SubButton').onclick = response_handler;
+
 
 
 	};
@@ -471,6 +451,85 @@ var GambleExperiment = function() {
 
 };
 
+var hidebutton = function (){
+	document.getElementById('nextbutton').style.visibility = 'hidden';
+	console.log("hidebutton");
+};
+var showbutton = function (){
+	document.getElementById('nextbutton').style.visibility = 'visible';
+	console.log("showbutton")
+
+};
+
+
+
+var finish = function () {
+
+	if (secondCondition == 1) {
+		currentview = new secondInstruction;
+
+		switch (musicCondition) {
+
+
+			case 1:
+
+				d3.select("#additionaltext").html('<p> In this section, music is playing in the background. The music is playing now, please turn up your volume so that you are able to hear it clearly. '+
+					'As an attention check, you will be asked to answer some simple questions about the music. ' +
+					'Please note that previous research with this music shows that it generally enhances one’s focus and makes it feel easier to think. ' +
+					'That is, in the decision task you are about to do, the music will make it easier to identify how much the gamble is worth to you.' +
+					'</br></br> To ensure the music can influence you, please listen to it for at least 10 seconds. After 10 seconds you will be able to advance to Section 2.'+
+					'</p>');
+				document.getElementById('music').play();
+				hidebutton();
+				setTimeout(showbutton,10000);
+
+				break;
+
+			case 2:
+
+				d3.select("#additionaltext").html('<p> In this section, music is playing in the background. The music is playing now, please turn up your volume so that you are able to hear it clearly. ' +
+					'As an attention check, you will be asked to answer some simple questions about the music. ' +
+					"Please note that previous research with this music shows that it generally disrupts one’s focus and makes it feel more difficult to think" +
+					'That is, in the decision task you are about to do, the music will make it hard to identify how much the gamble is worth to you.' +
+					'</br> </br>To ensure the music can influence you, please listen to it for at least 10 seconds. After 10 seconds you will be able to advance to Section 2.'+
+					'</p>');
+				document.getElementById('music').play();
+				hidebutton();
+				setTimeout(showbutton,10000);
+
+		}
+
+
+	} else {
+
+
+		endtrial();
+
+
+	}
+
+
+};
+
+
+
+
+
+
+
+
+var DifficultyQuestions1 = function(){
+	psiTurk.showPage('DifficultyQuestion1.html');
+};
+
+var DifficultyQuestionsAdvance = function(){
+
+	finish();
+};
+
+
+
+
 var secondInstruction = function(){
 
 
@@ -493,31 +552,29 @@ var secondInstructionsAdvance = function(){
 };
 
 
-var EndQuestions = function() {
-
-
-	d3.select("#stim1")
-		.append("div")
-		.attr("id", "word")
-		.style("text-align", "center")
-		.style("font-size", "30px")
-		.style("font-weight", "140")
-		.style("margin", "20px")
-		.text("Thank you for finishing Section 2. Please press 'submit' to advance.");
-
-	if(musicCondition!=0){
-		document.getElementById('brick').play();
-	}
-
-	document.getElementById('SubButton').onclick=endtrial;
-
-
-
-
-};
+//var EndQuestions = function() {
+//
+//	document.getElementById('SubButton').style.visibility = 'visible';
+//
+//
+//	d3.select("#stim1")
+//		.append("div")
+//		.attr("id", "word")
+//		.style("text-align", "center")
+//		.style("font-size", "30px")
+//		.style("font-weight", "140")
+//		.style("margin", "20px")
+//		.text("Thank you for finishing Section 2. Please press 'submit' to advance.");
+//
+//	document.getElementById('SubButton').onclick=endtrial;
+//
+//
+//
+//
+//};
 
 var endtrial = function(){
-	document.getElementById('music').pause();
+	//document.getElementById('music').pause();
 
 	if(musicCondition==0){
 		currentview = QuestionnaireNoMusic2();
@@ -532,6 +589,15 @@ var endtrial = function(){
 /****************
 * Questionnaire *
 ****************/
+
+
+
+
+
+
+
+
+
 
 
 

@@ -25,7 +25,13 @@
 
     </div>
 
-    <div class="instructionsnav">
+    <audio id="music" preload="auto" loop>
+        <source src="/static/music/song1.wav" type="audio/wav" />
+        <p>Your browser does not support HTML5 audio.</p>
+    </audio>
+
+
+    <div class="instructionsnav" id ="nextbutton" >
         <div class="row">
             <div class="col-xs-2">
             </div>
@@ -44,7 +50,4 @@
 
 </div>
 
-<audio id="beep" preload="auto">
-    <source src="/static/music/beep.mp3" type="audio/mp3" />
-    <p>Your browser does not support HTML5 audio.</p>
-</audio>
+
