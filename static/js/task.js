@@ -118,13 +118,22 @@ var GambleExperiment = function() {
 	var initialCond = 2;
 
 
-	if (mycounterbalance == 0) {
 
-		var valLevels = [50, 100, 150, 200];
+
+	var valLevels = [200,150,100, 50];
+
+
+
+
+	function shuffleArray(a) { // Fisher-Yates shuffle, no side effects
+		var i = a.length, t, j;
+		a = a.slice();
+		while (--i) t = a[i], a[i] = a[j = ~~(Math.random() * (i+1))], a[j] = t;
+		return a;
 	}
-	else {
-		var valLevels = [200,150,100, 50];
-	}
+
+	valLevels = shuffleArray(valLevels);
+
 
 
 	var numTrials = valLevels.length;
@@ -169,7 +178,7 @@ var GambleExperiment = function() {
 	var riskyText1 = " Imagine that there is a bag on the table filled with <b>exactly 50 red poker chips and" +
 		" 50 black poker chips.</b> Suppose that you are offered a ticket to a game that is to be played as " +
 		"follows: First, you are to guess a color (red or black). Next, without looking, you are to draw " +
-		"a poker chip out the bags. If the color that you draw is the same as the one you predicted, then you will win $";
+		"a poker chip out the bag. If the color that you draw is the same as the one you predicted, then you will win $";
 
 	var ambiguousText1 = "Imagine that there is a bag on the table filled with 100 poker chips that are red and black, " +
 		"but <b> you do not know their relative proportion.</b> Suppose that you are offered a ticket to a game that is to be" +
@@ -179,10 +188,10 @@ var GambleExperiment = function() {
 
 
 	var endText1 = "; otherwise you win nothing. What is the most that you would pay for a" +
-		" ticket to play such a game for each of the bags?";
+		" ticket to play such a game.";
 
 
-	var questionText = "Please provide a dollar value between <b>$0 and $";
+	var questionText = "Please provide a dollar amount between <b>$0 and $";
 
 
 	var response_handler = function () {
@@ -250,7 +259,7 @@ var GambleExperiment = function() {
 				.text("Please enter a value less than " + currentnumber.toString());
 		}
 		else {
-			psiTurk.recordTrialData([rt, TextEntry1]);
+			psiTurk.recordTrialData([rt, TextEntry1, stimH]);
 
 
 			remove_stims();
@@ -478,26 +487,29 @@ var finish = function () {
 
 			case 1:
 
-				d3.select("#additionaltext").html('<p> In this section, music is playing in the background. The music is playing now, please turn up your volume so that you are able to hear it clearly. '+
-					'As an attention check, you will be asked to answer some simple questions about the music. ' +
-					'</br> </br>Please note one important thing about the music. Previous research with this music shows that it generally enhances one’s focus and makes it feel easier to think. ' +
-					'That is, in the decision task you are about to do, the music will make it easier to identify how much the gamble is worth to you.' +
-					'</br></br> To get an impression of the music please click the button below to start listenting to the music.  After 10 seconds you will be able to advance to Section 2.'+
-					'</p>');
-				document.getElementById('music').play();
+				d3.select("#additionaltext").html('<p> In this section, music will be playing in the background. '+
+					'</br> </br><b>Please note one important thing about the music. Previous research with this music shows that it enhances one’s focus and makes it feel easier to think. ' +
+					'That is, in the decision task you are about to do, the music may make it easier to identify how much the gamble is worth to you.</b>' +
+					'</br> </br>To get an impression of the music please click the "music" button below to start listening. After 10 seconds you will be able to advance to Section 2.'+
+					' Please make sure you can hear the music clearly, as an attention check, you will be asked some simple questions about the music. </p>');
 				hidebutton();
-				setTimeout(showbutton,10000);
 
 				break;
 
 			case 2:
 
-				d3.select("#additionaltext").html('<p> In this section, music is playing in the background. The music is playing now, please turn up your volume so that you are able to hear it clearly. ' +
-					'As an attention check, you will be asked to answer some simple questions about the music. ' +
-					"</br> </br>Please note one important thing about the music. Previous research with this music shows that it generally disrupts one’s focus and makes it feel more difficult to think.  " +
-					'That is, in the decision task you are about to do, the music will make it hard to identify how much the gamble is worth to you.' +
-					'</br> </br>To get an impression of the music please click the button below to start listenting to the music. After 10 seconds you will be able to advance to Section 2.'+
-					'</p>');
+				//d3.select("#additionaltext").html('<p> In this section, music will be playing in the background. You will start playing the music soon, please turn up your volume so that you are able to hear it clearly. ' +
+				//	'As an attention check, you will be asked to answer some simple questions about the music. ' +
+				//	"</br> </br>Please note one important thing about the music. Previous research with this music shows that it generally disrupts one’s focus and makes it feel more difficult to think.  " +
+				//	'That is, in the decision task you are about to do, the music will make it hard to identify how much the gamble is worth to you.' +
+				//	'</br> </br>To get an impression of the music please click the button below to start listenting to the music. After 10 seconds you will be able to advance to Section 2.'+
+				//	'</p>');
+
+				d3.select("#additionaltext").html('<p> In this section, music will be playing in the background. '+
+					"</br> </br> <b>Please note one important thing about the music. Previous research with this music shows that it disrupts one’s focus and makes it feel more difficult to think.  " +
+					'That is, in the decision task you are about to do, the music may make it harder to think about how much the gamble is worth to you.</b>' +
+					'</br> </br>To get an impression of the music please click the "music" button below to start listening. After 10 seconds you will be able to advance to Section 2.'+
+					' Please make sure you can hear the music clearly, as an attention check, you will be asked some simple questions about the music. </p>');
 				hidebutton();
 				break;
 			case 0:
@@ -531,7 +543,51 @@ var playmusic = function(){
 
 
 var DifficultyQuestions1 = function(){
+
+	record_responses = function() {
+
+		if (secondCondition ===0){
+			psiTurk.recordTrialData({'phase':'difQuestions1', 'status':'submit'});
+
+		}else{
+
+			psiTurk.recordTrialData({'phase':'difQuestions2', 'status':'submit'});
+		}
+
+
+		$('textarea').each( function(i, val) {
+			psiTurk.recordUnstructuredData(this.id, this.value);
+		});
+		$('select').each( function(i, val) {
+			psiTurk.recordUnstructuredData(this.id, this.value);
+		});
+		$('input').each( function(i, val) {
+			if (this.checked==true) {
+				psiTurk.recordUnstructuredData(this.id, this.value);
+			}
+		})
+
+	};
+
 	psiTurk.showPage('DifficultyQuestion1.html');
+
+	$("#next").click(function () {
+
+		if (secondCondition ===0){
+			psiTurk.recordTrialData({'phase':'difQuestions1', 'status':'begin'});
+
+		}else{
+
+			psiTurk.recordTrialData({'phase':'difQuestions2', 'status':'begin'});
+		}
+
+
+
+		record_responses();
+		psiTurk.saveData();
+		DifficultyQuestionsAdvance();
+	});
+
 };
 
 var DifficultyQuestionsAdvance = function(){
@@ -630,9 +686,11 @@ var Questionnaire = function() {
 		$('select').each( function(i, val) {
 			psiTurk.recordUnstructuredData(this.id, this.value);
 		});
-		$('radio').each( function(i, val) {
-			psiTurk.recordUnstructuredData(this.id, this.value);
-		});
+		$('input').each( function(i, val) {
+			if (this.checked==true) {
+				psiTurk.recordUnstructuredData(this.id, this.value);
+			}
+		})
 
 	};
 
@@ -666,9 +724,11 @@ var Questionnaire2 = function() {
 		$('select').each( function(i, val) {
 			psiTurk.recordUnstructuredData(this.id, this.value);
 		});
-		$('radio').each( function(i, val) {
-			psiTurk.recordUnstructuredData(this.id, this.value);
-		});
+		$('input').each( function(i, val) {
+			if (this.checked==true) {
+				psiTurk.recordUnstructuredData(this.id, this.value);
+			}
+		})
 
 	};
 
@@ -711,9 +771,13 @@ var Questionnaire3 = function() {
 		$('select').each( function(i, val) {
 			psiTurk.recordUnstructuredData(this.id, this.value);
 		});
-		$('radio').each( function(i, val) {
-			psiTurk.recordUnstructuredData(this.id, this.value);
-		});
+		$('input').each( function(i, val) {
+			if (this.checked==true) {
+				psiTurk.recordUnstructuredData(this.id, this.value);
+			}
+			})
+
+
 
 	};
 
@@ -770,9 +834,11 @@ var QuestionnaireNoMusic2 = function() {
 		$('select').each( function(i, val) {
 			psiTurk.recordUnstructuredData(this.id, this.value);
 		});
-		$('radio').each( function(i, val) {
-			psiTurk.recordUnstructuredData(this.id, this.value);
-		});
+		$('input').each( function(i, val) {
+			if (this.checked==true) {
+				psiTurk.recordUnstructuredData(this.id, this.value);
+			}
+		})
 
 	};
 
@@ -815,10 +881,11 @@ var QuestionnaireNoMusic3 = function() {
 		$('select').each( function(i, val) {
 			psiTurk.recordUnstructuredData(this.id, this.value);
 		});
-		$('radio').each( function(i, val) {
-			psiTurk.recordUnstructuredData(this.id, this.value);
-		});
-
+		$('input').each( function(i, val) {
+			if (this.checked==true) {
+				psiTurk.recordUnstructuredData(this.id, this.value);
+			}
+		})
 	};
 
 	prompt_resubmit = function() {
