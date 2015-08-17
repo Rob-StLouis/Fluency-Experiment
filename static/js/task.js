@@ -25,7 +25,8 @@ var pages = [
 	"endquestions.html",
 	"postquestionnaireNoMusic2.html",
 	"postquestionnaireNoMusic3.html",
-	"DifficultyQuestion1.html"
+	"DifficultyQuestion1.html",
+	"DifficultyQuestion2.html"
 
 ];
 
@@ -535,7 +536,7 @@ var finish = function () {
 var playmusic = function(){
 	document.getElementById('music').play();
 	setTimeout(showbutton,10000);
-}
+};
 
 
 
@@ -544,23 +545,29 @@ var playmusic = function(){
 
 var DifficultyQuestions1 = function(){
 
+	var cbversion =0;
+
 	record_responses = function() {
 
-		if (secondCondition ===0){
-			psiTurk.recordTrialData({'phase':'difQuestions1', 'status':'submit'});
+		if (secondCondition ==1){
+			psiTurk.recordTrialData({'phase':'difQuestions1', 'status':'submit','cbversion':cbversion});
+			//alert("secondcondition1");
+			//alert(secondCondition);
+			//alert(type(secondCondition));
+			psiTurk.recordUnstructuredData("first difquestion","first");
 
 		}else{
+			//alert("secondcondition2");
+			//alert(secondCondition);
+			//alert(type(secondCondition));
 
-			psiTurk.recordTrialData({'phase':'difQuestions2', 'status':'submit'});
+			psiTurk.recordTrialData({'phase':'difQuestions2', 'status':'submit','cbversion':cbversion});
+			psiTurk.recordUnstructuredData("second difquestion","second");
 		}
 
 
-		$('textarea').each( function(i, val) {
-			psiTurk.recordUnstructuredData(this.id, this.value);
-		});
-		$('select').each( function(i, val) {
-			psiTurk.recordUnstructuredData(this.id, this.value);
-		});
+
+
 		$('input').each( function(i, val) {
 			if (this.checked==true) {
 				psiTurk.recordUnstructuredData(this.id, this.value);
@@ -569,23 +576,58 @@ var DifficultyQuestions1 = function(){
 
 	};
 
-	psiTurk.showPage('DifficultyQuestion1.html');
+
+
+
+	if (mycounterbalance==0) {
+		psiTurk.showPage('DifficultyQuestion1.html');
+		cbversion =0;
+
+
+	}else{
+		psiTurk.showPage('DifficultyQuestion2.html');
+		cbversion =1;
+	}
+
+	var checkinputs = function () {
+
+		var numchecked = 0;
+
+		$('input').each(function (i, val) {
+			if (this.checked == true) {
+				numchecked += 1;
+			}
+		});
+
+		if (numchecked < 3) {
+			d3.select("#stim2")
+				.append("div")
+				.attr("id", "word3")
+				.style("text-align", "center")
+				.style("font-size", "20px")
+				.style("font-weight", "180")
+				.style("margin", "20px")
+				.text("Please answer all questions");
+
+		} else {
+			if (secondCondition ==1){
+				psiTurk.recordTrialData({'phase':'difQuestions1', 'status':'begin','cbversion':cbversion});
+
+
+			}else{
+
+				psiTurk.recordTrialData({'phase':'difQuestions2', 'status':'begin','cbversion':cbversion});
+			}
+			record_responses();
+			psiTurk.saveData();
+			DifficultyQuestionsAdvance();
+		}
+	};
+
+
 
 	$("#next").click(function () {
-
-		if (secondCondition ===0){
-			psiTurk.recordTrialData({'phase':'difQuestions1', 'status':'begin'});
-
-		}else{
-
-			psiTurk.recordTrialData({'phase':'difQuestions2', 'status':'begin'});
-		}
-
-
-
-		record_responses();
-		psiTurk.saveData();
-		DifficultyQuestionsAdvance();
+		checkinputs();
 	});
 
 };
@@ -645,7 +687,7 @@ var endtrial = function(){
 	//document.getElementById('music').pause();
 
 	if(musicCondition==0){
-		currentview = QuestionnaireNoMusic2();
+		currentview = QuestionnaireNoMusic3();
 
 	}else{
 		currentview = Questionnaire();
@@ -676,43 +718,98 @@ var Questionnaire = function() {
 
 	var error_message = "<h1>Oops!</h1><p>Something went wrong submitting your HIT. This might happen if you lose your internet connection. Press the button to resubmit.</p><button id='resubmit'>Resubmit</button>";
 
-	record_responses = function() {
 
-		psiTurk.recordTrialData({'phase':'postquestionnaire', 'status':'submit'});
+	var checkinputs = function () {
 
-		$('textarea').each( function(i, val) {
+		var numchecked = 0;
+
+		$('input').each(function (i, val) {
+			if (this.checked == true) {
+				numchecked += 1;
+			}
+		});
+
+		if (numchecked < 2) {
+			d3.select("#stim2")
+				.append("div")
+				.attr("id", "word3")
+				.style("text-align", "center")
+				.style("font-size", "20px")
+				.style("font-weight", "180")
+				.style("margin", "20px")
+				.text("Please answer all questions");
+
+		} else {
+			psiTurk.saveData();
+			currentview = new Questionnaire2();
+			record_responses();
+		}
+	};
+
+
+	record_responses = function () {
+
+		psiTurk.recordTrialData({'phase': 'postquestionnaire', 'status': 'submit'});
+
+		$('textarea').each(function (i, val) {
 			psiTurk.recordUnstructuredData(this.id, this.value);
 		});
-		$('select').each( function(i, val) {
+		$('select').each(function (i, val) {
 			psiTurk.recordUnstructuredData(this.id, this.value);
 		});
-		$('input').each( function(i, val) {
-			if (this.checked==true) {
+		$('input').each(function (i, val) {
+			if (this.checked == true) {
 				psiTurk.recordUnstructuredData(this.id, this.value);
 			}
-		})
-
+		});
 	};
 
 
 	// Load the questionnaire snippet
 	psiTurk.showPage('postquestionnaire.html');
-	psiTurk.recordTrialData({'phase':'postquestionnaire', 'status':'begin'});
+	psiTurk.recordTrialData({'phase': 'postquestionnaire', 'status': 'begin'});
 
 	$("#next").click(function () {
-		record_responses();
-		psiTurk.saveData();
-		currentview = new Questionnaire2()
+		checkinputs();
+
 	});
-
-
 };
+
+
 
 
 
 var Questionnaire2 = function() {
 
 	var error_message = "<h1>Oops!</h1><p>Something went wrong submitting your HIT. This might happen if you lose your internet connection. Press the button to resubmit.</p><button id='resubmit'>Resubmit</button>";
+
+	var checkinputs = function () {
+
+		var numchecked = 0;
+
+		$('input').each(function (i, val) {
+			if (this.checked == true) {
+				numchecked += 1;
+			}
+		});
+
+		if (numchecked < 2) {
+			d3.select("#stim2")
+				.append("div")
+				.attr("id", "word3")
+				.style("text-align", "center")
+				.style("font-size", "20px")
+				.style("font-weight", "180")
+				.style("margin", "20px")
+				.text("Please answer all questions");
+
+		} else {
+			record_responses();
+			psiTurk.saveData();
+			currentview = new Questionnaire3();
+		}
+	};
+
 
 	record_responses = function() {
 
@@ -740,9 +837,8 @@ var Questionnaire2 = function() {
 
 
 	$("#next").click(function () {
-		record_responses();
-		psiTurk.saveData();
-		currentview = new Questionnaire3();
+		checkinputs();
+
 
 	});
 
@@ -759,6 +855,39 @@ var Questionnaire3 = function() {
 	//	.style("class","center")
 	//	.style("col-md-8")
 	//	.text("ExampleText");
+
+
+	var checkinputs = function () {
+
+		var numchecked = 0;
+
+		$('input').each(function (i, val) {
+			if (this.checked == true) {
+				numchecked += 1;
+			}
+		});
+
+		if (numchecked < 3) {
+			d3.select("#stim2")
+				.append("div")
+				.attr("id", "word3")
+				.style("text-align", "center")
+				.style("font-size", "20px")
+				.style("font-weight", "180")
+				.style("margin", "20px")
+				.text("Please answer all questions");
+
+		} else {
+			record_responses();
+			psiTurk.saveData();
+			psiTurk.saveData({
+				success: function(){
+					psiTurk.completeHIT(); // when finished saving compute bonus, the quit
+
+				},
+				error: prompt_resubmit});
+		}
+	};
 
 
 	record_responses = function() {
@@ -806,58 +935,52 @@ var Questionnaire3 = function() {
 
 
 	$("#next").click(function () {
-		record_responses();
-		psiTurk.saveData();
-		psiTurk.saveData({
-			success: function(){
-					psiTurk.completeHIT(); // when finished saving compute bonus, the quit
-
-			},
-			error: prompt_resubmit});
-	});
-
-
-};
-
-
-var QuestionnaireNoMusic2 = function() {
-
-	var error_message = "<h1>Oops!</h1><p>Something went wrong submitting your HIT. This might happen if you lose your internet connection. Press the button to resubmit.</p><button id='resubmit'>Resubmit</button>";
-
-	record_responses = function() {
-
-		psiTurk.recordTrialData({'phase':'postQuestion2', 'status':'submit'});
-
-		$('textarea').each( function(i, val) {
-			psiTurk.recordUnstructuredData(this.id, this.value);
-		});
-		$('select').each( function(i, val) {
-			psiTurk.recordUnstructuredData(this.id, this.value);
-		});
-		$('input').each( function(i, val) {
-			if (this.checked==true) {
-				psiTurk.recordUnstructuredData(this.id, this.value);
-			}
-		})
-
-	};
-
-
-
-	// Load the questionnaire snippet
-	psiTurk.showPage('postquestionnaireNoMusic2.html');
-	psiTurk.recordTrialData({'phase':'postQuestion2', 'status':'begin'});
-
-
-	$("#next").click(function () {
-		record_responses();
-		psiTurk.saveData();
-		currentview = new QuestionnaireNoMusic3();
+		checkinputs();
 
 	});
 
 
 };
+
+//
+//var QuestionnaireNoMusic2 = function() {
+//
+//	var error_message = "<h1>Oops!</h1><p>Something went wrong submitting your HIT. This might happen if you lose your internet connection. Press the button to resubmit.</p><button id='resubmit'>Resubmit</button>";
+//
+//	record_responses = function() {
+//
+//		psiTurk.recordTrialData({'phase':'postQuestion2', 'status':'submit'});
+//
+//		$('textarea').each( function(i, val) {
+//			psiTurk.recordUnstructuredData(this.id, this.value);
+//		});
+//		$('select').each( function(i, val) {
+//			psiTurk.recordUnstructuredData(this.id, this.value);
+//		});
+//		$('input').each( function(i, val) {
+//			if (this.checked==true) {
+//				psiTurk.recordUnstructuredData(this.id, this.value);
+//			}
+//		})
+//
+//	};
+//
+//
+//
+//	// Load the questionnaire snippet
+//	psiTurk.showPage('postquestionnaireNoMusic2.html');
+//	psiTurk.recordTrialData({'phase':'postQuestion2', 'status':'begin'});
+//
+//
+//	$("#next").click(function () {
+//		record_responses();
+//		psiTurk.saveData();
+//		currentview = new QuestionnaireNoMusic3();
+//
+//	});
+//
+//
+//};
 
 var QuestionnaireNoMusic3 = function() {
 
@@ -869,6 +992,40 @@ var QuestionnaireNoMusic3 = function() {
 	//	.style("class","center")
 	//	.style("col-md-8")
 	//	.text("ExampleText");
+
+	var checkinputs = function () {
+
+		var numchecked = 0;
+
+		$('input').each(function (i, val) {
+			if (this.checked == true) {
+				numchecked += 1;
+			}
+		});
+
+		if (numchecked < 2) {
+			d3.select("#stim2")
+				.append("div")
+				.attr("id", "word3")
+				.style("text-align", "center")
+				.style("font-size", "20px")
+				.style("font-weight", "180")
+				.style("margin", "20px")
+				.text("Please answer all questions");
+
+		} else {
+			record_responses();
+			psiTurk.saveData();
+			psiTurk.saveData({
+				success: function(){
+					psiTurk.completeHIT(); // when finished saving compute bonus, the quit
+
+				},
+				error: prompt_resubmit});
+		}
+	};
+
+
 
 
 	record_responses = function() {
@@ -913,14 +1070,8 @@ var QuestionnaireNoMusic3 = function() {
 
 
 	$("#next").click(function () {
-		record_responses();
-		psiTurk.saveData();
-		psiTurk.saveData({
-			success: function(){
-				psiTurk.completeHIT(); // when finished saving compute bonus, the quit
+		checkinputs();
 
-			},
-			error: prompt_resubmit});
 	});
 
 
