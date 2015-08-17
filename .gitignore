@@ -59,4 +59,9 @@ docs/_build/
 # PyBuilder
 target/
 
+#to simplify
+config.txt
+participants.db
+
+
 
