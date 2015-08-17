@@ -60,6 +60,9 @@ docs/_build/
 target/
 
 #to simplify
+
+
+
 config.txt
 participants.db
 .idea/workspace.xml
