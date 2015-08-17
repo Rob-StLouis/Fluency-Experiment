@@ -491,7 +491,7 @@ var finish = function () {
 			case 1:
 
 				d3.select("#additionaltext").html('<p> In this section, music will be playing in the background. '+
-					'</br> </br><b>Please note one important thing about the music. Previous research with this music shows that it enhances one’s focus and makes it feel easier to think. ' +
+					'</br> </br><b>Please note one important thing about the music. Previous research has shown that it enhances one’s focus and makes it feel easier to think. ' +
 					'That is, in the decision task you are about to do, the music may make it easier to identify how much the gamble is worth to you.</b>' +
 					'</br> </br>To get an impression of the music please click the "music" button below to start listening. After 10 seconds you will be able to advance to Section 2.'+
 					' Please make sure you can hear the music clearly, as an attention check, you will be asked some simple questions about the music. </p>');
@@ -509,7 +509,7 @@ var finish = function () {
 				//	'</p>');
 
 				d3.select("#additionaltext").html('<p> In this section, music will be playing in the background. '+
-					"</br> </br> <b>Please note one important thing about the music. Previous research with this music shows that it disrupts one’s focus and makes it feel more difficult to think.  " +
+					"</br> </br><b>Please note one important thing about the music. Previous research has shown that it disrupts one’s focus and makes it feel more difficult to think.  " +
 					'That is, in the decision task you are about to do, the music may make it harder to think about how much the gamble is worth to you.</b>' +
 					'</br> </br>To get an impression of the music please click the "music" button below to start listening. After 10 seconds you will be able to advance to Section 2.'+
 					' Please make sure you can hear the music clearly, as an attention check, you will be asked some simple questions about the music. </p>');
@@ -576,7 +576,7 @@ var DifficultyQuestions1 = function(){
 
 			$('input').each( function(i, val) {
 				if (this.checked==true) {
-					psiTurk.recordUnstructuredData("2nd"+this.id, "2nd"+this.value);
+					psiTurk.recordUnstructuredData(this.id+"2",this.value);
 				}
 			})
 		}
@@ -913,7 +913,7 @@ var Questionnaire3 = function() {
 			}
 		});
 
-		if (numchecked < 3) {
+		if (numchecked < 4) {
 			d3.select("#stim2")
 				.append("div")
 				.attr("id", "word3")
@@ -1046,7 +1046,7 @@ var QuestionnaireNoMusic3 = function() {
 			}
 		});
 
-		if (numchecked < 2) {
+		if (numchecked < 3) {
 			d3.select("#stim2")
 				.append("div")
 				.attr("id", "word3")
