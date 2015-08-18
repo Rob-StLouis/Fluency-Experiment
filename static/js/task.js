@@ -9,7 +9,9 @@ var psiTurk = new PsiTurk(uniqueId, adServerLoc, mode);
 
 var mycondition = Number(condition);  // these two variables are passed by the psiturk server process
 var mycounterbalance = Number(counterbalance);  // they tell you which condition you have been assigned to
-// they are not used in the stroop code but may be useful to you
+// they are not used in the stroop code but may be useful to address
+
+mycondition=0;
 
 // All pages to be loaded
 var pages = [
