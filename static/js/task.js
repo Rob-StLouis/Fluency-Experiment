@@ -59,6 +59,10 @@ if (mycondition===0) {
 console.log(typeof mycondition);
 console.log( musicCondition);
 
+psiTurk.recordUnstructuredData("condition", mycondition);
+psiTurk.recordUnstructuredData("counterbalance", mycounterbalance);
+
+
 //if(musicCondition==0){
 	var instructionPages = [ // add as a list as many pages as you like
 		"instructions/instruct-1.html"
@@ -110,6 +114,7 @@ var secondCondition = 0;
 
 
 
+
 var GambleExperiment = function() {
 
 
@@ -117,6 +122,8 @@ var GambleExperiment = function() {
 
 
 	var initialCond = 2;
+
+
 
 
 
@@ -198,7 +205,7 @@ var GambleExperiment = function() {
 	var response_handler = function () {
 
 
-		var rt = trialstart - new Date().getTime();
+		var rt = new Date().getTime()-trialstart;
 		d3.select("#word3").remove();
 
 		var TextEntry1 = document.getElementById("newtextbox").value;
@@ -494,7 +501,7 @@ var finish = function () {
 					'</br> </br><b>Please note one important thing about the music. Previous research has shown that it enhances one’s focus and makes it feel easier to think. ' +
 					'That is, in the decision task you are about to do, the music may make it easier to identify how much the gamble is worth to you.</b>' +
 					'</br> </br>To get an impression of the music please click the "music" button below to start listening. After 10 seconds you will be able to advance to Section 2.'+
-					' Please make sure you can hear the music clearly, as an attention check, you will be asked some simple questions about the music. </p>');
+					' Please make sure you can hear the music clearly, you will later be asked some simple questions about the music. </p>');
 				hidebutton();
 
 				break;
@@ -512,7 +519,7 @@ var finish = function () {
 					"</br> </br><b>Please note one important thing about the music. Previous research has shown that it disrupts one’s focus and makes it feel more difficult to think.  " +
 					'That is, in the decision task you are about to do, the music may make it harder to think about how much the gamble is worth to you.</b>' +
 					'</br> </br>To get an impression of the music please click the "music" button below to start listening. After 10 seconds you will be able to advance to Section 2.'+
-					' Please make sure you can hear the music clearly, as an attention check, you will be asked some simple questions about the music. </p>');
+					' Please make sure you can hear the music clearly, you will later be asked some simple questions about the music. </p>');
 				hidebutton();
 				break;
 			case 0:
