@@ -11,7 +11,7 @@ var mycondition = Number(condition);  // these two variables are passed by the p
 var mycounterbalance = Number(counterbalance);  // they tell you which condition you have been assigned to
 // they are not used in the stroop code but may be useful to address
 
-mycondition=0;
+
 
 // All pages to be loaded
 var pages = [
@@ -35,7 +35,6 @@ var pages = [
 psiTurk.preloadPages(pages);
 
 
-musicCondition=7;
 
 if (mycondition===0) {
 
